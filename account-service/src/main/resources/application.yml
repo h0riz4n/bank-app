@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: account-service
+
+  config:
+    import: 'optional:consul:'
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        hostname: localhost
+        port: ${server.port}
+        register-health-check: false
+        # health-check-path: /actuator/health
+        # health-check-interval: 10s
+      config:
+        format: YAML
+        enabled: true
+        fail-fast: true
+        defaultContext: application

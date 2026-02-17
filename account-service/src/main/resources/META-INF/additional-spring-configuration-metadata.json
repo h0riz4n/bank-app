@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "account-service.default-database-schema",
+      "type": "java.lang.String",
+      "description": "Схема базы данных по умолчанию"
+    }
+  ]
+}
