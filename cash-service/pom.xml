@@ -123,6 +123,7 @@
 								<useJakartaEe>true</useJakartaEe>
 								<useSpringBoot3>true</useSpringBoot3>
 								<openApiNullable>false</openApiNullable>
+								<dateLibrary>java8-localdatetime</dateLibrary>
 							</configOptions>
 						</configuration>
 					</execution>
