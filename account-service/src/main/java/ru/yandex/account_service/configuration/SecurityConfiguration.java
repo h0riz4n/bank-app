@@ -33,7 +33,6 @@ public class SecurityConfiguration {
             .cors(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authz -> {
                 authz
-                    .requestMatchers("/api/accounts").hasAuthority("user")
                     .requestMatchers("/api/balances/**").authenticated()
                     .anyRequest().permitAll();
             })

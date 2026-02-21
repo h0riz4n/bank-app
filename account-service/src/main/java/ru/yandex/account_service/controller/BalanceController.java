@@ -27,7 +27,7 @@ public class BalanceController {
 
     @PutMapping(path = "/cash", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AccountDto> cash(@RequestBody @Valid CashDto dto) {
-        return ResponseEntity.ok(accountMapper.toDto(accountService.cash(dto.action(), dto.amount())));
+        return ResponseEntity.ok(accountMapper.toDto(accountService.cash(dto.accountId(), dto.action(), dto.amount())));
     }
 
     @PutMapping(path = "/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)

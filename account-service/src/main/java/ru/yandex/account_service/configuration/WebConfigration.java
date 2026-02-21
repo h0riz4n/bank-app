@@ -9,26 +9,10 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.web.client.RestClient;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.notification.api.NotificationApi;
-import ru.notification.client.ApiClient;
 
 @Slf4j
 @Configuration
 public class WebConfigration {
-
-    private final String notificationBaseUrl = "http://notification-service";
-
-    @Bean
-    public ApiClient apiClient(RestClient restClient) {
-        ApiClient apiClient = new ApiClient(restClient);
-        apiClient.setBasePath(notificationBaseUrl);
-        return apiClient;
-    }
-
-    @Bean
-    public NotificationApi notificationApi(ApiClient apiClient) {
-        return new NotificationApi(apiClient);
-    }
 
     @Bean
     @LoadBalanced

@@ -1,12 +1,14 @@
 server:
   port: 8080
+  servlet:
+    context-path: /
 
 spring:
   application:
     name: account-service
 
   config:
-    import: 'optional:consul:'
+    import: 'consul:'
 
   cloud:
     consul:

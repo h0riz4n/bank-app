@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,6 @@ public class AccountDto {
     private String lastName;
 
     @Past
-    @JsonFormat(pattern = "dd.MM.yyyy")
     @JsonView({ AccountView.Detail.class, AccountView.UpdateProfile.class })
     private LocalDate birthDate;
 

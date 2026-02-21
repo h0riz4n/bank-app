@@ -15,11 +15,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ru.yandex.account_service.annotation.IsUser;
 import ru.yandex.account_service.mapper.AccountMapper;
 import ru.yandex.account_service.model.dto.AccountDto;
 import ru.yandex.account_service.model.view.AccountView;
 import ru.yandex.account_service.service.AccountService;
 
+@IsUser
 @Validated
 @RestController
 @RequestMapping(path = "/api/accounts")

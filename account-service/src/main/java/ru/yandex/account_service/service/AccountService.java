@@ -53,15 +53,14 @@ public class AccountService {
     }
     
     @Transactional
-    public AccountEntity cash(ECashAction cashAction, BigDecimal amount) {
-        var currentAccount = loadAccount();
+    public AccountEntity cash(UUID accountId, ECashAction cashAction, BigDecimal amount) {
+        var currentAccount = loadAccount(accountId);
         var newAmount = switch (cashAction) {
             case GET -> withdraw(currentAccount, amount);
             case PUT -> deposit(currentAccount, amount);
         };
         currentAccount.setAmount(newAmount);
         return accountRepo.save(currentAccount);
-        // notificationClient.notify("Изменён баланс счёта %s. Теперь баланс составляет %s".formatted(account.getId(), account.getAmount()));
     }
 
     @Transactional
@@ -76,7 +75,6 @@ public class AccountService {
         sender.setAmount(sender.getAmount().subtract(amount));
         recipient.setAmount(recipient.getAmount().add(amount));
         accountRepo.saveAll(List.of(sender, recipient));
-        // notificationClient.notify("Был произведён перевод на сумму %s со счёта %s на %s".formatted(amount, senderId, recipientId));
     }
 
     private AccountEntity createAccount(Jwt jwt) {
