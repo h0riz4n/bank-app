@@ -1,0 +1,31 @@
+server:
+    port: 8081
+
+spring:
+    application:
+        name: my-bank-front-app
+
+    output:
+        ansi:
+            enabled: always
+
+    security:
+        oauth2:
+            client:
+                registration:
+                    keycloak:
+                        client-id: ${CLIENT_ID:}
+                        client-secret: ${CLIENT_SECRET:}
+                        scope: openid, profile, email
+                        authorization-grant-type: authorization_code
+                        redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
+                provider:
+                    keycloak:
+                        issuer-uri: ${ISSUER_URI:}
+                        user-info-uri: ${ISSUER_URI:}/protocol/openid-connect/userinfo
+                        token-uri: ${ISSUER_URI:}/protocol/openid-connect/token
+                        jwk-set-uri: ${ISSUER_URI:}/protocol/openid-connect/certs
+
+
+my-front-app:
+    base-path: http://localhost:8765
