@@ -23,4 +23,3 @@ spring:
         enabled: true
         fail-fast: true
         defaultContext: application
-

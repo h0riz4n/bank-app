@@ -25,8 +25,10 @@ public class RouteConfiguration {
 		RouteLocatorBuilder.Builder routes = builder.routes();
 		discoveryClient.getServices()
             .forEach(service -> {
-                routes.route(r -> r.path("/%s/v3/api-docs/swagger-config".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
-                routes.route(r -> r.path("/%s/v3/api-docs".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
+				routes.route(r -> r.path("/" + service).uri("lb://%s".formatted(service)));
+				// routes.route(r -> r.path("/%s/api/**".formatted(service)).and().uri("lb://%s".formatted(service)));
+                // routes.route(r -> r.path("/%s/v3/api-docs/swagger-config".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
+                // routes.route(r -> r.path("/%s/v3/api-docs".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
             });
   		return routes.build();
  	}
