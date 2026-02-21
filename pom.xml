@@ -15,6 +15,7 @@
         <module>notification-service</module>
         <module>api-gateway</module>
         <module>cash-service</module>
+        <module>transfer-service</module>
     </modules>
 
     <properties>
