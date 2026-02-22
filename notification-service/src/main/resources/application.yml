@@ -1,5 +1,5 @@
 server:
-  port: 8089
+  port: ${SERVER_PORT:8089}
   servlet:
     context-path: /
 
@@ -12,14 +12,13 @@ spring:
 
   cloud:
     consul:
-      host: localhost
-      port: 8500
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
       discovery:
-        hostname: localhost
         port: ${server.port}
-        register-health-check: false
-        # health-check-path: /actuator/health
-        # health-check-interval: 10s
+        register-health-check: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
       config:
         format: YAML
         enabled: true

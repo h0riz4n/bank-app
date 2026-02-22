@@ -1,0 +1,127 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      SPRING_PROFILE: local
+    ports:
+      - 8765:8080
+    expose:
+      - 8080
+    networks:
+      - local
+  
+  account-service:
+    build:
+      context: ./account-service
+      dockerfile: Dockerfile
+    container_name: account-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      SPRING_PROFILE: local
+    expose:
+      - 8080
+    depends_on:
+      - postgres
+    networks:
+      - local
+  
+  postgres:
+    image: postgres:16.4
+    container_name: postgres-bank
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: bank_db
+      TZ: Europe/Moscow
+    volumes:
+      - postgres-bank-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    networks:
+      - local
+
+  cash-service:
+    build:
+      context: ./cash-service
+      dockerfile: Dockerfile
+    container_name: cash-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      SPRING_PROFILE: local
+    expose:
+      - 8080
+    networks:
+      - local
+    
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      SPRING_PROFILE: local
+    expose:
+      - 8080
+    networks:
+      - local
+
+  transfer-service:
+    build:
+      context: ./transfer-service
+      dockerfile: Dockerfile
+    container_name: transfer-service
+    restart: unless-stopped
+    environment:
+      SERVER_PORT: 8080
+      CONSUL_HOST: consul-dev
+      CONSUL_PORT: 8500
+      SPRING_PROFILE: local
+    expose:
+      - 8080
+    networks:
+      - local
+
+  front-service:
+    build:
+      context: ./my-bank-front-app
+      dockerfile: Dockerfile
+    container_name: front-service
+    environment:
+      SERVER_PORT: 8080
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      ISSUER_URI: ${ISSUER_URI}
+      HOST: http://api-gateway:8080
+      SPRING_PROFILE: local
+      REDIRECT_URI: http://localhost:8080/login/oauth2/code/keycloak
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+    networks:
+      - local
+
+volumes:
+  postgres-bank-data:
+
+networks:
+  local:
+    external: true

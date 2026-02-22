@@ -1,5 +1,5 @@
 server:
-    port: 8081
+    port: ${SERVER_PORT:8080}
 
 spring:
     application:
@@ -18,7 +18,7 @@ spring:
                         client-secret: ${CLIENT_SECRET:}
                         scope: openid, profile, email
                         authorization-grant-type: authorization_code
-                        redirect-uri: http://localhost:8081/login/oauth2/code/keycloak
+                        redirect-uri: ${REDIRECT_URI:http://localhost:8081/login/oauth2/code/keycloak}
                 provider:
                     keycloak:
                         issuer-uri: ${ISSUER_URI:}
@@ -26,6 +26,5 @@ spring:
                         token-uri: ${ISSUER_URI:}/protocol/openid-connect/token
                         jwk-set-uri: ${ISSUER_URI:}/protocol/openid-connect/certs
 
-
 my-front-app:
-    base-path: http://localhost:8765
+    base-path: ${HOST:http://localhost:8765}

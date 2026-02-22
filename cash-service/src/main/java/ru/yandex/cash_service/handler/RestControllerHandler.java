@@ -24,9 +24,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +40,7 @@ public class RestControllerHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<ProblemDetail> handleError4xxException(HttpClientErrorException e) {
+    public ResponseEntity<ProblemDetail> handleHttpClientErrorException(HttpClientErrorException e) {
         return ResponseEntity
             .of(e.getResponseBodyAs(ProblemDetail.class))
             .build();

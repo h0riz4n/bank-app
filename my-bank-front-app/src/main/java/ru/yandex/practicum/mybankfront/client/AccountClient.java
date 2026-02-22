@@ -12,7 +12,6 @@ import org.springframework.web.client.RestClient;
 import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.mybankfront.model.Account;
 import ru.yandex.practicum.mybankfront.model.UpdateAccount;
-import ru.yandex.practicum.mybankfront.model.dto.AccountDto;
 
 @Component
 @RequiredArgsConstructor

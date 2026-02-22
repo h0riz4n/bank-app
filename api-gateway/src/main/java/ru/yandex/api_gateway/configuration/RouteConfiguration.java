@@ -6,7 +6,6 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +25,6 @@ public class RouteConfiguration {
 		discoveryClient.getServices()
             .forEach(service -> {
 				routes.route(r -> r.path("/" + service).uri("lb://%s".formatted(service)));
-				// routes.route(r -> r.path("/%s/api/**".formatted(service)).and().uri("lb://%s".formatted(service)));
-                // routes.route(r -> r.path("/%s/v3/api-docs/swagger-config".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
-                // routes.route(r -> r.path("/%s/v3/api-docs".formatted(service)).and().method(HttpMethod.GET).uri("lb://%s".formatted(service)));
             });
   		return routes.build();
  	}

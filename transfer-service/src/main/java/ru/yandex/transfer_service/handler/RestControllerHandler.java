@@ -40,7 +40,7 @@ public class RestControllerHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(HttpClientErrorException.class)
-    public ResponseEntity<ProblemDetail> handleError4xxException(HttpClientErrorException ex) {
+    public ResponseEntity<ProblemDetail> handleHttpClientErrorException(HttpClientErrorException ex) {
         return ResponseEntity
             .of(ex.getResponseBodyAs(ProblemDetail.class))
             .build();

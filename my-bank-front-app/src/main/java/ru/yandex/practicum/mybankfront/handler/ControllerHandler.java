@@ -27,6 +27,7 @@ public class ControllerHandler {
     ) {
         frontService.getAccount(model, authorizedClient.getAccessToken().getTokenValue());
         model.addAttribute("errors", ex.getResponseBodyAs(ProblemDetail.class).getDetail());
+        model.addAttribute("info", null);
         return "main";
     }
 
@@ -38,6 +39,7 @@ public class ControllerHandler {
     ) {
         frontService.getAccount(model, authorizedClient.getAccessToken().getTokenValue());
         model.addAttribute("errors", ex.getMessage());
+        model.addAttribute("info", null);
         return "main";
     }
 }
