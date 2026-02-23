@@ -1,0 +1,24 @@
+server:
+  port: ${SERVER_PORT:8090}
+
+spring:
+  application:
+    name: cash-service
+
+  config:
+    import: 'consul:'
+
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        port: ${server.port}
+        register-health-check: true
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+      config:
+        format: YAML
+        enabled: true
+        fail-fast: true
+        defaultContext: application

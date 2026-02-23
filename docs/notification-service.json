@@ -1,0 +1,72 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Notification Service",
+        "description": "Сервис уведомлений",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Сервер"
+        }
+    ],
+    "paths": {
+        "/api/notification": {
+            "post": {
+                "tags": [
+                    "Notification"
+                ],
+                "operationId": "notification",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NotificationDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                },
+                "security": [
+                    {
+                        "OAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "NotificationDto": {
+                "type": "object",
+                "properties": {
+                    "log": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "OAuth": {
+                "type": "oauth2",
+                "flows": {
+                    "clientCredentials": {
+                        "authorizationUrl": "http://localhost:8100/realms/bank/protocol/openid-connect/auth",
+                        "tokenUrl": "http://localhost:8100/realms/bank/protocol/openid-connect/token",
+                        "refreshUrl": "http://localhost:8100/realms/bank/protocol/openid-connect/token",
+                        "scopes": {
+                            "openid": "openid"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

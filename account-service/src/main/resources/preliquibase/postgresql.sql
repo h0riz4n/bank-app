@@ -1,0 +1,1 @@
+CREATE SCHEMA IF NOT EXISTS ${account-service.default-database-schema};
