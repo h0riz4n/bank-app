@@ -8,19 +8,16 @@ spring:
     name: notification-service
 
   config:
-    import: 'consul:'
+    import: 'kubernetes:'
 
   cloud:
-    consul:
-      host: ${CONSUL_HOST:localhost}
-      port: ${CONSUL_PORT:8500}
+    kubernetes:
       discovery:
-        port: ${server.port}
-        register-health-check: true
-        health-check-path: /actuator/health
-        health-check-interval: 10s
-      config:
-        format: YAML
         enabled: true
+        namespaces: default
+      config:
+        enabled: true
+        name: api-gateway
+        namespace: default
         fail-fast: true
-        defaultContext: application
+        include-profile-specific-sources: false

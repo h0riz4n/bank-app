@@ -23,4 +23,4 @@ cd ./notification-service && ./mvnw clean package -DskipTests=true && cd ..
 # Package transfer-service
 cd ./transfer-service && ./mvnw clean package -DskipTests=true && cd .. 
 
-docker-compose up -d --build
+# docker-compose up -d --build
