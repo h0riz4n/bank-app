@@ -1,0 +1,31 @@
+apiVersion: v2
+name: bank-app
+description: A Helm chart for Kubernetes
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"
+dependencies:
+  - name: postgresql
+    version: "18.2.0"
+    repository: oci://registry-1.docker.io/bitnamicharts
+    alias: postgresql
+    condition: postgresql.enabled
+  - name: account-service
+    version: "0.1.0"
+    repository: "file://charts/account-service"
+  - name: api-gateway
+    version: "0.1.0"
+    repository: "file://charts/api-gateway"
+  - name: cash-service
+    version: "0.1.0"
+    repository: "file://charts/cash-service"
+  - name: notification-service
+    version: "0.1.0"
+    repository: "file://charts/notification-service"
+  - name: transfer-service
+    version: "0.1.0"
+    repository: "file://charts/transfer-service"
+  
