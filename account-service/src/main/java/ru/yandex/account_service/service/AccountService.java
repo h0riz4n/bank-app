@@ -25,8 +25,8 @@ import ru.yandex.account_service.repository.AccountRepository;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final TransactionTemplate transactionTemplate;
     private final NotificationClient notificationClient;
+    private final TransactionTemplate transactionTemplate;
     private final AccountRepository accountRepo;
 
     public List<AccountEntity> getAll() {
@@ -48,7 +48,7 @@ public class AccountService {
             currentAccount.setBirthDate(birthDate);
             return accountRepo.save(currentAccount);
         });
-        notificationClient.notify("Обновлён аккаунт с ID: %s".formatted(account.getId()));
+        notificationClient.send("Обновлён аккаунт с ID: %s".formatted(account.getId()));
         return account;
     }
     

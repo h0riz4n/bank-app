@@ -1,28 +1,21 @@
 package ru.yandex.account_service.client;
 
+import java.util.UUID;
+
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
-
-import lombok.extern.slf4j.Slf4j;
-import ru.notification.api.NotificationApi;
-import ru.notification.client.ApiClient;
+import lombok.RequiredArgsConstructor;
 import ru.notification.model.NotificationDto;
 
-@Slf4j
 @Component
+@RequiredArgsConstructor
 public class NotificationClient {
 
-    private final String NOTIFICATION_BASE_PATH = "http://notification-service";
-    private final NotificationApi notificationApi;
+    private static final String TOPIC = "notifications";
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public NotificationClient(RestClient restClient) {
-        this.notificationApi = new NotificationApi(new ApiClient(restClient).setBasePath(NOTIFICATION_BASE_PATH));
-    }
-
-    public void notify(String message) {
-        NotificationDto notification = new NotificationDto()
-            .log(message);
-        notificationApi.notification(notification);
+    public void send(String message) {
+        kafkaTemplate.send(TOPIC, UUID.randomUUID().toString(), new NotificationDto().log(message));
     }
 }
