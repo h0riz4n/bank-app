@@ -23,7 +23,7 @@ public class CashService {
     public AccountDto cash(Cash cash) {
         var accountId = getAccountId(getCurrentAuth().getToken());
         var account = cashClient.cash(accountId, cash);
-        notificationClient.notify("Изменён баланс счёта %s. Теперь баланс составляет %s".formatted(account.getId(), account.getAmount()));
+        notificationClient.send("Изменён баланс счёта %s. Теперь баланс составляет %s".formatted(account.getId(), account.getAmount()));
         return account;
     }
 
