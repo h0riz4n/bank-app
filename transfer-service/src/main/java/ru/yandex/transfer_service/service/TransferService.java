@@ -27,7 +27,7 @@ public class TransferService {
             .senderId(getAccountId(getCurrentAuth().getToken()));
 
         transferClient.transfer(transfer);
-        notificationClient.notify("Был произведён перевод на сумму %s со счёта %s на %s".formatted(transfer.getAmount(), transfer.getSenderId(), transfer.getRecipientId()));
+        notificationClient.send("Был произведён перевод на сумму %s со счёта %s на %s".formatted(transfer.getAmount(), transfer.getSenderId(), transfer.getRecipientId()));
     }
 
     private UUID getAccountId(Jwt jwt) {
