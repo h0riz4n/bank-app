@@ -167,3 +167,9 @@ postgresql:
     username: "postgres"
     password: "2003"
     database: "bank_db"
+
+kafka:
+  enabled: true
+  replicaCount: 1
+  config:
+    num.partitions: "2"
