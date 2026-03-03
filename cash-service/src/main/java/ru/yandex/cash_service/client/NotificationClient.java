@@ -1,25 +1,21 @@
 package ru.yandex.cash_service.client;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
+import java.util.UUID;
 
-import ru.notification.api.NotificationApi;
-import ru.notification.client.ApiClient;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 import ru.notification.model.NotificationDto;
 
 @Component
+@RequiredArgsConstructor
 public class NotificationClient {
 
-    private final String notificationBaseUrl = "http://notification-service";
-    private final NotificationApi notificationApi;
+    private static final String TOPIC = "notifications";
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public NotificationClient(RestClient restClient) {
-        this.notificationApi = new NotificationApi(new ApiClient(restClient).setBasePath(notificationBaseUrl));
-    }
-
-    public void notify(String message) {
-        NotificationDto notification = new NotificationDto();
-        notification.setLog(message);
-        notificationApi.notification(notification);
+    public void send(String message) {
+        kafkaTemplate.send(TOPIC, UUID.randomUUID().toString(), new NotificationDto().log(message));
     }
 }
