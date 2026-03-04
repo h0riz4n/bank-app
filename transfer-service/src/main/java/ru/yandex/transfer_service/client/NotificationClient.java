@@ -4,11 +4,8 @@ import java.util.UUID;
 
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
 import lombok.RequiredArgsConstructor;
-import ru.notification.api.NotificationApi;
-import ru.notification.client.ApiClient;
 import ru.notification.model.NotificationDto;
 
 @Component

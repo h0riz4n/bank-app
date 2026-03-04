@@ -17,7 +17,7 @@ spring:
         namespaces: default
       config:
         enabled: true
-        name: api-gateway
+        name: ${spring.application.name}
         namespace: default
         fail-fast: true
         include-profile-specific-sources: false
