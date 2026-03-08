@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import ru.account.model.AccountDto;
+import ru.notification.model.NotificationDto;
 import ru.yandex.cash_service.client.CashClient;
-import ru.yandex.cash_service.client.NotificationClient;
 import ru.yandex.cash_service.model.dto.Cash;
+import ru.yandex.kafka_chassis.client.NotificationClient;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,8 @@ public class CashService {
     public AccountDto cash(Cash cash) {
         var accountId = getAccountId(getCurrentAuth().getToken());
         var account = cashClient.cash(accountId, cash);
-        notificationClient.send("Изменён баланс счёта %s. Теперь баланс составляет %s".formatted(account.getId(), account.getAmount()));
+        var message = toNotification("Изменён баланс счёта %s. Теперь баланс составляет %s".formatted(account.getId(), account.getAmount()));
+        notificationClient.send(accountId.toString(), message);
         return account;
     }
 
@@ -33,5 +35,9 @@ public class CashService {
 
     private JwtAuthenticationToken getCurrentAuth() {
         return (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-    } 
+    }
+
+    private NotificationDto toNotification(String message) {
+        return new NotificationDto().log(message);
+    }
 }
