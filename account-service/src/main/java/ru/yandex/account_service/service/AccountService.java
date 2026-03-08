@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import lombok.RequiredArgsConstructor;
-import ru.yandex.account_service.client.NotificationClient;
+import ru.notification.model.NotificationDto;
 import ru.yandex.account_service.exception.ApiServiceException;
+import ru.yandex.account_service.exception.CashServiceException;
+import ru.yandex.account_service.exception.TransferServiceException;
 import ru.yandex.account_service.model.entity.AccountEntity;
 import ru.yandex.account_service.model.enums.ECashAction;
 import ru.yandex.account_service.repository.AccountRepository;
+import ru.yandex.kafka_chassis.client.NotificationClient;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +51,10 @@ public class AccountService {
             currentAccount.setBirthDate(birthDate);
             return accountRepo.save(currentAccount);
         });
-        notificationClient.send("Обновлён аккаунт с ID: %s".formatted(account.getId()));
+        notificationClient.send(
+            account.getLogin(),
+            toNotification("Обновлён аккаунт с ID: %s".formatted(account.getId()))
+        );
         return account;
     }
     
@@ -69,7 +75,7 @@ public class AccountService {
         var recipient = loadAccount(recipientId);
 
         if (sender.getAmount().compareTo(amount) < 0) {
-            throw new ApiServiceException(HttpStatus.BAD_REQUEST, "Недостаточно средств");
+            throw new TransferServiceException(sender, recipient, HttpStatus.BAD_REQUEST, "Недостаточно средств");
         }
 
         sender.setAmount(sender.getAmount().subtract(amount));
@@ -99,7 +105,7 @@ public class AccountService {
 
     private BigDecimal withdraw(AccountEntity account, BigDecimal amount) {
         if (account.getAmount().compareTo(amount) < 0) {
-            throw new ApiServiceException(HttpStatus.BAD_REQUEST, "Недостаточно средств");
+            throw new CashServiceException(account, HttpStatus.BAD_REQUEST, "Недостаточно средств");
         }
         return account.getAmount().subtract(amount);
     }
@@ -114,5 +120,9 @@ public class AccountService {
 
     private JwtAuthenticationToken getCurrentAuth() {
         return (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-    } 
+    }
+
+    private NotificationDto toNotification(String message) {
+        return new NotificationDto().log(message);
+    }
 }

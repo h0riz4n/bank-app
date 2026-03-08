@@ -24,18 +24,46 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.account_service.exception.ApiServiceException;
+import ru.yandex.account_service.exception.CashServiceException;
+import ru.yandex.account_service.exception.TransferServiceException;
+import ru.yandex.account_service.metrics.CashMetrics;
+import ru.yandex.account_service.metrics.TransferMetrics;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class RestControllerHandler extends ResponseEntityExceptionHandler {
+
+    private final CashMetrics cashMetrics;
+    private final TransferMetrics transferMetrics;
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException e) {
         log.error("Unhandled runtime exception ({}) handler: {}", e.getClass().getSimpleName(), e.getMessage(), e);
         return ResponseEntity
             .of(buildProblemDetail("Unhandled API error", HttpStatus.INTERNAL_SERVER_ERROR))
+            .build();
+    }
+
+    @ExceptionHandler(CashServiceException.class)
+    public ResponseEntity<ProblemDetail> handleCashServiceException(CashServiceException ex) {
+        log.debug("CashServiceException handler: {}", ex.getMessage());
+        cashMetrics.incrementFailedWithdraw(ex.getAccount().getLogin());
+        return ResponseEntity
+            .of(buildProblemDetail(ex.getMessage(), ex.getHttpStatus()))
+            .build();
+    }
+
+    @ExceptionHandler(TransferServiceException.class)
+    public ResponseEntity<ProblemDetail> handleTransferServiceException(TransferServiceException ex) {
+        log.debug("TransferServiceException handler: {}", ex.getMessage());
+        transferMetrics.incrementFailedTransfers(ex.getSender().getLogin());
+        transferMetrics.incrementFailedTransfers(ex.getRecipient().getLogin());
+        return ResponseEntity
+            .of(buildProblemDetail(ex.getMessage(), ex.getHttpStatus()))
             .build();
     }
 
