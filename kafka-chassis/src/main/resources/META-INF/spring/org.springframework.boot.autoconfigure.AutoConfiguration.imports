@@ -1,1 +1,3 @@
 ru.yandex.kafka_chassis.configuration.KafkaAutoConfiguration
+ru.yandex.kafka_chassis.metrics.NotificationMetrics
+ru.yandex.kafka_chassis.client.NotificationClient

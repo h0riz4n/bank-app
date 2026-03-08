@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import io.micrometer.observation.ObservationRegistry;
+
 import java.util.Map;
 
 @AutoConfiguration
@@ -27,7 +29,11 @@ public class KafkaAutoConfiguration {
 
     @Bean("kafkaBankTemplate")
     @ConditionalOnMissingBean
-    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
+    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory, ObservationRegistry observationRegistry) {
+        KafkaTemplate<String, Object> kafkaTemplate = new KafkaTemplate<>(producerFactory);
+        kafkaTemplate.setMicrometerEnabled(true);
+        kafkaTemplate.setObservationEnabled(true);
+        kafkaTemplate.setObservationRegistry(observationRegistry);
+        return kafkaTemplate;
     }
 }
