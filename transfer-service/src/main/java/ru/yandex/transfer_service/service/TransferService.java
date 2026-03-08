@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import ru.account.model.TransferDto;
-import ru.yandex.transfer_service.client.NotificationClient;
+import ru.notification.model.NotificationDto;
+import ru.yandex.kafka_chassis.client.NotificationClient;
 import ru.yandex.transfer_service.client.TransferClient;
 import ru.yandex.transfer_service.model.dto.RecepientDto;
 
@@ -27,7 +28,14 @@ public class TransferService {
             .senderId(getAccountId(getCurrentAuth().getToken()));
 
         transferClient.transfer(transfer);
-        notificationClient.send("Был произведён перевод на сумму %s со счёта %s на %s".formatted(transfer.getAmount(), transfer.getSenderId(), transfer.getRecipientId()));
+        var message = toNotification(
+            "Был произведён перевод на сумму %s со счёта %s на %s".formatted(
+                transfer.getAmount(), 
+                transfer.getSenderId(), 
+                transfer.getRecipientId()
+            )
+        );
+        notificationClient.send(transfer.getSenderId().toString(), transfer.getRecipientId().toString(), message);
     }
 
     private UUID getAccountId(Jwt jwt) {
@@ -36,5 +44,9 @@ public class TransferService {
 
     private JwtAuthenticationToken getCurrentAuth() {
         return (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-    } 
+    }
+
+    private NotificationDto toNotification(String message) {
+        return new NotificationDto().log(message);
+    }
 }
