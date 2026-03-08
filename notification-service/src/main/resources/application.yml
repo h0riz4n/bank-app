@@ -1,83 +1,23 @@
-# server:
-#   port: ${SERVER_PORT:8089}
-#   servlet:
-#     context-path: /
-
-# spring:
-#   application:
-#     name: notification-service
-
-#   config:
-#     import: 'kubernetes:'
-
-#   cloud:
-#     kubernetes:
-#       discovery:
-#         enabled: true
-#         namespaces: default
-#       config:
-#         enabled: true
-#         name: ${spring.application.name}
-#         namespace: default
-#         fail-fast: true
-#         include-profile-specific-sources: false
 server:
-    port: 8089
-    servlet:
-        context-path: ${context-path:}
+  port: ${SERVER_PORT:8089}
+  servlet:
+    context-path: /
 
 spring:
-  kafka:
-    admin:
-      client-id: notification-service
-    bootstrap-servers: localhost:9092
-
   application:
-      name: notification-service
+    name: notification-service
 
-  jackson:
-      mapper:
-          DEFAULT_VIEW_INCLUSION: true
+  config:
+    import: 'kubernetes:'
 
-  security:
-      oauth2:
-          resourceserver:
-              jwt:
-                  jwk-set-uri: https://dev-id.acgnn.ru/realms/practicum/protocol/openid-connect/certs
-                  issuer-uri: https://dev-id.acgnn.ru/realms/practicum
-
-  output:
-      ansi:
-          enabled: ALWAYS
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health,info"
-  endpoint:
-    health:
-      probes:
+  cloud:
+    kubernetes:
+      discovery:
         enabled: true
-  observations:
-    enable:
-      kafka: true
-  zipkin:
-    tracing:
-      endpoint:  http://127.0.0.1:9411/api/v2/spans
-  tracing:
-    sampling:
-      probability: 1
-
-logging:
-  level:
-    '[ru.yandex.notification_service]': DEBUG
-
-app:
-    info:
-        title: 'Notification Service'
-        version: '0.0.1'
-        description: 'Сервис уведомлений'
-    server:
-        url: ${host-url:http://localhost:8080}${server.servlet.context-path}
-        description: Сервер
+        namespaces: default
+      config:
+        enabled: true
+        name: ${spring.application.name}
+        namespace: default
+        fail-fast: true
+        include-profile-specific-sources: false

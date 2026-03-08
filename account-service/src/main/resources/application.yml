@@ -6,103 +6,19 @@ server:
 spring:
   application:
     name: account-service
-
-  jackson:
-    mapper:
-      DEFAULT_VIEW_INCLUSION: true
-  
-  kafka:
-    bootstrap-servers: localhost:9092
-
-  security:
-    oauth2:
-      client:
-        registration:
-          notification-client:
-            provider: keycloak
-            client-id: account-service
-            client-secret: uka2BXpCh8KJz5qBftg2Yp8a7WBJBrID
-            authorization-grant-type: client_credentials
-        provider:
-          keycloak:
-            token-uri: https://dev-id.acgnn.ru/realms/practicum/protocol/openid-connect/token
-      resourceserver:
-        jwt:
-          jwk-set-uri: https://dev-id.acgnn.ru/realms/practicum/protocol/openid-connect/certs
-          issuer-uri: https://dev-id.acgnn.ru/realms/practicum
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/test_db
-    username: postgres
-    password: 2003
-    hikari:
-        maximum-pool-size: 4
-        minimum-idle: 2
-        auto-commit: false
-
-  jpa:
-    open-in-view: false
-    show-sql: false
-    hibernate:
-        ddl-auto: validate
-    properties:
-        hibernate:
-          highlight_sql: true
-          order_inserts: true
-          default_schema: ${account-service.default-database-schema}
-          format_sql: true
-          jdbc:
-            batch_size: 100
-
-  liquibase:
-    enabled: true
-    change-log: classpath:/db/changelog/db.changelog-master.yml
-    default-schema: ${account-service.default-database-schema}
-    parameters:
-      schema: ${account-service.default-database-schema}
-
-  output:
-    ansi:
-      enabled: ALWAYS
     
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health,info,prometheus,metrics"
-  endpoint:
-    health:
-      probes:
+  config:
+    import: 'kubernetes:'
+
+  cloud:
+    kubernetes:
+      discovery:
         enabled: true
-  observations:
-    enable:
-      kafka: true
-  zipkin:
-    tracing:
-      endpoint:  http://127.0.0.1:9411/api/v2/spans
-  tracing:
-    sampling:
-      probability: 1
-
-account-service:
-  default-database-schema: account_service
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    ru.yandex.account_service: DEBUG
-  # config:
-  #   import: 'kubernetes:'
-
-  # cloud:
-  #   kubernetes:
-  #     discovery:
-  #       enabled: true
-  #       namespaces: default
-  #     config:
-  #       enabled: true
-  #       name: ${spring.application.name}
-  #       namespace: default
-  #       fail-fast: true
-  #       include-profile-specific-sources: false
+        namespaces: default
+      config:
+        enabled: true
+        name: ${spring.application.name}
+        namespace: default
+        fail-fast: true
+        include-profile-specific-sources: false
 
