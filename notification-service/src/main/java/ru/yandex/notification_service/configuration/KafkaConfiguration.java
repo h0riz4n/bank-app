@@ -35,7 +35,7 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, NotificationDto> houseRetryContainerFactory(
+    public ConcurrentKafkaListenerContainerFactory<String, NotificationDto> containerFactory(
         MessagingMessageConverter messagingMessageConverter,
         @Value("${spring.kafka.bootstrap-servers}") String bootstrapServers
     ) {
